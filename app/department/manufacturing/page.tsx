@@ -1,142 +1,212 @@
 "use client"
-import { Card, CardContent } from "@/components/ui/card"
+
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   ArrowLeft,
-  FileText,
   Factory,
-  BarChart3,
-  Wrench,
+  FileText,
   AlertTriangle,
-  ClipboardCheck,
-  Package,
-  Users,
-  Calendar,
-  Archive,
-  Search,
+  CheckCircle,
+  Clock,
+  Plus,
+  Download,
   Settings,
-  TrendingUp,
+  BarChart3,
+  Package,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
 const manufacturingDocuments = [
   {
-    name: "Manufacturing Data Reporting",
-    icon: BarChart3,
-    color: "bg-blue-500",
-    description: "Production data collection and performance reporting",
-    lastUpdated: "1 day ago",
-    status: "Active",
-    route: "/department/manufacturing/data-reporting",
+    id: 1,
+    title: "Production Line A Maintenance Schedule",
+    type: "Maintenance Schedule",
+    status: "completed",
+    priority: "high",
+    dueDate: "2024-01-22",
+    assignee: "Emily Chen",
+    progress: 100,
+    lastModified: "2024-01-20",
   },
   {
-    name: "Preventive Maintenance",
-    icon: Wrench,
-    color: "bg-green-500",
-    description: "Scheduled maintenance procedures and tracking",
-    lastUpdated: "2 days ago",
-    status: "Active",
-    route: "/department/manufacturing/preventive-maintenance",
+    id: 2,
+    title: "Quality Control Batch Record #2024-001",
+    type: "Batch Record",
+    status: "in_progress",
+    priority: "critical",
+    dueDate: "2024-01-25",
+    assignee: "James Thompson",
+    progress: 85,
+    lastModified: "2024-01-21",
   },
   {
-    name: "Deviation Management",
-    icon: AlertTriangle,
-    color: "bg-red-500",
-    description: "Manufacturing deviation investigation and resolution",
-    lastUpdated: "3 hours ago",
-    status: "Under Review",
-    route: "/department/manufacturing/deviation-management",
+    id: 3,
+    title: "Equipment Calibration Report - January",
+    type: "Calibration Report",
+    status: "pending",
+    priority: "medium",
+    dueDate: "2024-01-28",
+    assignee: "Lisa Wang",
+    progress: 30,
+    lastModified: "2024-01-18",
   },
   {
-    name: "Quality Control Procedures",
-    icon: ClipboardCheck,
-    color: "bg-purple-500",
-    description: "QC testing protocols and acceptance criteria",
-    lastUpdated: "1 week ago",
-    status: "Active",
-    route: "/department/manufacturing/quality-control",
+    id: 4,
+    title: "Inventory Management System Update",
+    type: "System Documentation",
+    status: "overdue",
+    priority: "high",
+    dueDate: "2024-01-20",
+    assignee: "David Rodriguez",
+    progress: 65,
+    lastModified: "2024-01-19",
   },
   {
-    name: "Batch Records",
-    icon: FileText,
-    color: "bg-orange-500",
-    description: "Production batch documentation and tracking",
-    lastUpdated: "4 hours ago",
-    status: "Active",
-    route: "/department/manufacturing/batch-records",
-  },
-  {
-    name: "Equipment Maintenance Logs",
-    icon: Settings,
-    color: "bg-indigo-500",
-    description: "Equipment service history and maintenance records",
-    lastUpdated: "2 days ago",
-    status: "Active",
-    route: "/department/manufacturing/equipment-logs",
-  },
-  {
-    name: "Supplier Qualification",
-    icon: Users,
-    color: "bg-cyan-500",
-    description: "Vendor assessment and qualification documentation",
-    lastUpdated: "1 week ago",
-    status: "Active",
-    route: "/department/manufacturing/supplier-qualification",
-  },
-  {
-    name: "Production Schedule",
-    icon: Calendar,
-    color: "bg-yellow-500",
-    description: "Manufacturing planning and scheduling documents",
-    lastUpdated: "6 hours ago",
-    status: "Active",
-    route: "/department/manufacturing/production-schedule",
-  },
-  {
-    name: "Inventory Management",
-    icon: Package,
-    color: "bg-emerald-500",
-    description: "Raw material and finished goods inventory tracking",
-    lastUpdated: "3 hours ago",
-    status: "Active",
-    route: "/department/manufacturing/inventory-management",
-  },
-  {
-    name: "Manufacturing Audits",
-    icon: Search,
-    color: "bg-pink-500",
-    description: "Internal and external manufacturing audit reports",
-    lastUpdated: "5 days ago",
-    status: "Active",
-    route: "/department/manufacturing/audits",
-  },
-  {
-    name: "Process Validation",
-    icon: TrendingUp,
-    color: "bg-teal-500",
-    description: "Manufacturing process validation and verification",
-    lastUpdated: "1 week ago",
-    status: "Active",
-    route: "/department/manufacturing/process-validation",
-  },
-  {
-    name: "Change Control",
-    icon: Archive,
-    color: "bg-gray-500",
-    description: "Manufacturing change control documentation",
-    lastUpdated: "3 days ago",
-    status: "Active",
-    route: "/department/manufacturing/change-control",
+    id: 5,
+    title: "Production Data Analysis Q1 2024",
+    type: "Data Report",
+    status: "in_progress",
+    priority: "medium",
+    dueDate: "2024-02-01",
+    assignee: "Emily Chen",
+    progress: 45,
+    lastModified: "2024-01-21",
   },
 ]
 
-export default function ManufacturingDepartmentPage() {
+const productionMetrics = [
+  { name: "Line A", efficiency: 94, target: 95, status: "good" },
+  { name: "Line B", efficiency: 87, target: 90, status: "warning" },
+  { name: "Line C", efficiency: 98, target: 95, status: "excellent" },
+  { name: "Line D", efficiency: 82, target: 85, status: "critical" },
+]
+
+const recentActivities = [
+  {
+    id: 1,
+    action: "Batch Record Completed",
+    document: "Batch Record #2024-001",
+    user: "James Thompson",
+    timestamp: "1 hour ago",
+    type: "completion",
+  },
+  {
+    id: 2,
+    action: "Equipment Maintenance",
+    document: "Production Line A Maintenance",
+    user: "Emily Chen",
+    timestamp: "3 hours ago",
+    type: "maintenance",
+  },
+  {
+    id: 3,
+    action: "Quality Check Passed",
+    document: "Quality Control Report",
+    user: "Lisa Wang",
+    timestamp: "5 hours ago",
+    type: "quality",
+  },
+  {
+    id: 4,
+    action: "Inventory Updated",
+    document: "Raw Materials Inventory",
+    user: "David Rodriguez",
+    timestamp: "1 day ago",
+    type: "inventory",
+  },
+]
+
+export default function ManufacturingPage() {
+  const [documents, setDocuments] = useState(manufacturingDocuments)
+  const [activities, setActivities] = useState(recentActivities)
+  const [metrics, setMetrics] = useState(productionMetrics)
+  const [userType, setUserType] = useState("employee")
+  const [userName, setUserName] = useState("")
+
+  useEffect(() => {
+    const storedUserType = localStorage.getItem("userType") || "employee"
+    const storedUserName = localStorage.getItem("userName") || "Demo User"
+    setUserType(storedUserType)
+    setUserName(storedUserName)
+
+    // Log department access
+    const activityLog = JSON.parse(localStorage.getItem("activityLog") || "[]")
+    activityLog.push({
+      id: Date.now(),
+      user: storedUserName,
+      action: "Department Access",
+      details: "Accessed Manufacturing department page",
+      timestamp: new Date().toISOString(),
+      type: "access",
+    })
+    localStorage.setItem("activityLog", JSON.stringify(activityLog))
+  }, [])
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-100 text-green-800"
+      case "in_progress":
+        return "bg-blue-100 text-blue-800"
+      case "pending":
+        return "bg-yellow-100 text-yellow-800"
+      case "overdue":
+        return "bg-red-100 text-red-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "critical":
+        return "bg-red-100 text-red-800"
+      case "high":
+        return "bg-orange-100 text-orange-800"
+      case "medium":
+        return "bg-yellow-100 text-yellow-800"
+      case "low":
+        return "bg-green-100 text-green-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "completed":
+        return <CheckCircle className="w-4 h-4 text-green-600" />
+      case "in_progress":
+        return <Clock className="w-4 h-4 text-blue-600" />
+      case "pending":
+        return <AlertTriangle className="w-4 h-4 text-yellow-600" />
+      case "overdue":
+        return <AlertTriangle className="w-4 h-4 text-red-600" />
+      default:
+        return <FileText className="w-4 h-4 text-gray-600" />
+    }
+  }
+
+  const getEfficiencyColor = (efficiency, target) => {
+    if (efficiency >= target + 5) return "text-green-600"
+    if (efficiency >= target) return "text-blue-600"
+    if (efficiency >= target - 5) return "text-yellow-600"
+    return "text-red-600"
+  }
+
+  const completedDocs = documents.filter((doc) => doc.status === "completed").length
+  const inProgressDocs = documents.filter((doc) => doc.status === "in_progress").length
+  const overdueDocs = documents.filter((doc) => doc.status === "overdue").length
+  const averageEfficiency = Math.round(metrics.reduce((sum, metric) => sum + metric.efficiency, 0) / metrics.length)
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -146,139 +216,157 @@ export default function ManufacturingDepartmentPage() {
                   Back to Dashboard
                 </Button>
               </Link>
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-orange-500 rounded-lg">
-                  <Factory className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Manufacturing & Production</h1>
-                  <p className="text-gray-600">Production Operations and Quality Management</p>
-                </div>
-              </div>
+              <Image src="/logo.png" alt="CMPLAI Logo" width={120} height={40} className="object-contain" />
             </div>
-            <Image src="/logo.png" alt="CMPLAI Logo" width={100} height={35} className="object-contain" />
+            <div className="flex items-center space-x-2">
+              <Link href="/create-document">
+                <Button className="bg-orange-600 hover:bg-orange-700">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create New Document
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm">
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
-        {/* Department Overview */}
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Department Header */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="p-3 bg-orange-100 rounded-lg">
+              <Factory className="w-8 h-8 text-orange-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Manufacturing</h1>
+              <p className="text-gray-600">Manage production processes, quality control, and manufacturing documentation</p>
+            </div>
+          </div>
+          {userType === "manager" && (
+            <Badge className="bg-green-100 text-green-800">Manager View - Full Department Access</Badge>
+          )}
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold mb-2">Department Overview</h2>
-                  <p className="text-orange-100 mb-4">
-                    Managing production operations, quality control, and manufacturing excellence across all facilities.
-                  </p>
-                  <div className="flex space-x-6">
-                    <div>
-                      <p className="text-2xl font-bold">{manufacturingDocuments.length}</p>
-                      <p className="text-orange-100 text-sm">Total Documents</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">
-                        {manufacturingDocuments.filter((doc) => doc.status === "Active").length}
-                      </p>
-                      <p className="text-orange-100 text-sm">Active Documents</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold">99.2%</p>
-                      <p className="text-orange-100 text-sm">Production Efficiency</p>
-                    </div>
-                  </div>
+                  <p className="text-sm text-gray-600">Total Documents</p>
+                  <p className="text-2xl font-bold text-gray-900">{documents.length}</p>
                 </div>
-                <div className="hidden md:block">
-                  <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
-                    <Factory className="w-10 h-10 text-white" />
-                  </div>
+                <FileText className="w-8 h-8 text-blue-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">Production Lines</p>
+                  <p className="text-2xl font-bold text-gray-900">{metrics.length}</p>
                 </div>
+                <Settings className="w-8 h-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">Avg Efficiency</p>
+                  <p className="text-2xl font-bold text-gray-900">{averageEfficiency}%</p>
+                </div>
+                <BarChart3 className="w-8 h-8 text-orange-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">Active Batches</p>
+                  <p className="text-2xl font-bold text-gray-900">12</p>
+                </div>
+                <Package className="w-8 h-8 text-purple-600" />
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Documents Grid */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Manufacturing Documents</h2>
-            <Button className="bg-orange-600 hover:bg-orange-700">
-              <FileText className="w-4 h-4 mr-2" />
-              Create New Document
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {manufacturingDocuments.map((document, index) => (
-              <Link key={index} href={document.route}>
-                <Card className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-3 mb-4">
-                      <div className={`p-2 rounded-lg ${document.color} flex-shrink-0`}>
-                        <document.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">{document.name}</h3>
-                        <Badge 
-                          variant={document.status === "Active" ? "default" : "secondary"} 
-                          className={`text-xs ${document.status === "Active" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-600"}`}
-                        >
-                          {document.status}
-                        </Badge>
-                      </div>
+        {/* Production Efficiency */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5" />
+              Production Line Efficiency
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {metrics.map((metric, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900">{metric.name}</h3>
+                    <Badge
+                      className={`text-xs ${
+                        metric.status === "excellent"
+                          ? "bg-green-100 text-green-800"
+                          : metric.status === "good"
+                            ? "bg-blue-100 text-blue-800"
+                            : metric.status === "warning"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {metric.status}
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Current</span>
+                      <span className={`font-bold ${getEfficiencyColor(metric.efficiency, metric.target)}`}>
+                        {metric.efficiency}%
+                      </span>
                     </div>
-
-                    <p className="text-xs text-gray-600 mb-3 line-clamp-2">{document.description}</p>
-
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>Updated {document.lastUpdated}</span>
-                      <FileText className="w-3 h-3" />
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Target</span>
+                      <span className="font-bold text-gray-700">{metric.target}%</span>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Quick Actions */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <BarChart3 className="w-8 h-8 text-blue-500 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-2">Production Report</h3>
-                <p className="text-sm text-gray-600">Generate daily production report</p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Wrench className="w-8 h-8 text-green-500 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-2">Schedule Maintenance</h3>
-                <p className="text-sm text-gray-600">Plan equipment maintenance</p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Package className="w-8 h-8 text-emerald-500 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-2">Inventory Check</h3>
-                <p className="text-sm text-gray-600">Review inventory levels</p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <ClipboardCheck className="w-8 h-8 text-purple-500 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-2">Quality Audit</h3>
-                <p className="text-sm text-gray-600">Conduct quality inspection</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* Recent Activity */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {activities.map((item) => (
+                <div key={item.id} className="flex items-center justify-between bg-white p-3 rounded border">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{item.action}</p>
+                    <p className="text-xs text-gray-600">{item.document} • {item.user}</p>
+                  </div>
+                  <span className="text-xs text-gray-500">{item.timestamp}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

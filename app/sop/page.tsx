@@ -316,11 +316,7 @@ export default function SOPPage() {
             </div>
 
             <div className="flex space-x-3">
-              <Button 
-                onClick={generateContent} 
-                disabled={!aiPrompt.trim() || isGenerating} 
-                className={`flex-1 ${aiPrompt.trim() ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500'}`}
-              >
+              <Button onClick={generateContent} disabled={!aiPrompt.trim() || isGenerating} className="flex-1">
                 {isGenerating ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>

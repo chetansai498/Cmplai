@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "CMPLAI - AI-Powered ERP Solution",
   description: "Comprehensive ERP software developed by LN Infosphere TechTransformers Pvt Ltd",
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
