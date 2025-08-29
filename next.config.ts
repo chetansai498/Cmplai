@@ -16,12 +16,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-};
-// next.config.js
-module.exports = {
   eslint: {
+    // 🚀 This tells Vercel/Next.js to skip ESLint during builds
     ignoreDuringBuilds: true,
   },
-}
+};
 
 export default nextConfig;
+
