@@ -45,7 +45,7 @@ export default function ActivityLogPage() {
 
     if (searchTerm) {
       filtered = filtered.filter(
-        (entry) =>
+        (entry:any) =>
           entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.user.toLowerCase().includes(searchTerm.toLowerCase()),
