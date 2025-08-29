@@ -69,7 +69,7 @@ export default function ActivityLogPage() {
     setFilteredLog(filtered)
   }, [searchTerm, filterType, filterUser, activityLog])
 
-  const getActivityIcon = (type) => {
+  const getActivityIcon = (type: string) => {
     switch (type) {
       case "ai_generation":
         return <Sparkles className="w-4 h-4 text-blue-500" />
@@ -88,7 +88,7 @@ export default function ActivityLogPage() {
     }
   }
 
-  const getActivityColor = (type) => {
+  const getActivityColor = (type: string) => {
     switch (type) {
       case "ai_generation":
         return "bg-blue-100 text-blue-800"
