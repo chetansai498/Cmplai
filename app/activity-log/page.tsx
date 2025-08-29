@@ -51,7 +51,7 @@ export default function ActivityLogPage() {
 
     if (searchTerm) {
       filtered = filtered.filter(
-        (entry:ActivityLogEntry) =>
+        (entry:any) =>
           entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.user.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -59,11 +59,11 @@ export default function ActivityLogPage() {
     }
 
     if (filterType !== "all") {
-      filtered = filtered.filter((entry) => entry.type === filterType)
+      filtered = filtered.filter((entry:any) => entry.type === filterType)
     }
 
     if (filterUser !== "all") {
-      filtered = filtered.filter((entry) => entry.user === filterUser)
+      filtered = filtered.filter((entry:any) => entry.user === filterUser)
     }
 
     setFilteredLog(filtered)
