@@ -23,9 +23,19 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 
+// Define the interface for activity log entries
+interface ActivityLogEntry {
+  id: string;
+  action: string;
+  details: string;
+  user: string;
+  type: string;
+  timestamp: string;
+}
+
 export default function ActivityLogPage() {
-  const [activityLog, setActivityLog] = useState([])
-  const [filteredLog, setFilteredLog] = useState([])
+  const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([])
+  const [filteredLog, setFilteredLog] = useState<ActivityLogEntry[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterUser, setFilterUser] = useState("all")
@@ -33,7 +43,7 @@ export default function ActivityLogPage() {
 
   useEffect(() => {
     // Load activity log from localStorage
-    const log = JSON.parse(localStorage.getItem("activityLog") || "[]")
+    const log: ActivityLogEntry[] = JSON.parse(localStorage.getItem("activityLog") || "[]")
     setActivityLog(log.reverse()) // Show most recent first
     setFilteredLog(log)
     setIsLoading(false)
@@ -41,17 +51,11 @@ export default function ActivityLogPage() {
 
   useEffect(() => {
     // Filter activity log based on search and filters
-    let filtered = activityLog
-    interface ActivityLogEntry {
-  action: string;
-  details: string;
-  user: string;
-  // add other properties as needed
-}
+    let filtered: ActivityLogEntry[] = activityLog
 
     if (searchTerm) {
       filtered = filtered.filter(
-        (entry:any) =>
+        (entry: ActivityLogEntry) =>
           entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.user.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -59,11 +63,11 @@ export default function ActivityLogPage() {
     }
 
     if (filterType !== "all") {
-      filtered = filtered.filter((entry:any) => entry.type === filterType)
+      filtered = filtered.filter((entry: ActivityLogEntry) => entry.type === filterType)
     }
 
     if (filterUser !== "all") {
-      filtered = filtered.filter((entry:any) => entry.user === filterUser)
+      filtered = filtered.filter((entry: ActivityLogEntry) => entry.user === filterUser)
     }
 
     setFilteredLog(filtered)
@@ -107,13 +111,13 @@ export default function ActivityLogPage() {
     }
   }
 
-  const uniqueUsers = [...new Set(activityLog.map((entry) => entry.user))]
-  const uniqueTypes = [...new Set(activityLog.map((entry) => entry.type))]
+  const uniqueUsers = [...new Set(activityLog.map((entry: ActivityLogEntry) => entry.user))]
+  const uniqueTypes = [...new Set(activityLog.map((entry: ActivityLogEntry) => entry.type))]
 
   const refreshLog = () => {
     setIsLoading(true)
     setTimeout(() => {
-      const log = JSON.parse(localStorage.getItem("activityLog") || "[]")
+      const log: ActivityLogEntry[] = JSON.parse(localStorage.getItem("activityLog") || "[]")
       setActivityLog(log.reverse())
       setFilteredLog(log)
       setIsLoading(false)
@@ -192,7 +196,7 @@ export default function ActivityLogPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
-                  {uniqueTypes.map((type) => (
+                  {uniqueTypes.map((type: string) => (
                     <SelectItem key={type} value={type}>
                       {type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
                     </SelectItem>
@@ -205,7 +209,7 @@ export default function ActivityLogPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Users</SelectItem>
-                  {uniqueUsers.map((user) => (
+                  {uniqueUsers.map((user: string) => (
                     <SelectItem key={user} value={user}>
                       {user}
                     </SelectItem>
@@ -236,7 +240,7 @@ export default function ActivityLogPage() {
               </div>
             ) : filteredLog.length > 0 ? (
               <div className="space-y-4">
-                {filteredLog.map((entry) => (
+                {filteredLog.map((entry: ActivityLogEntry) => (
                   <div
                     key={entry.id}
                     className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -307,7 +311,7 @@ export default function ActivityLogPage() {
                 <div>
                   <p className="text-sm text-gray-600">AI Generations</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {activityLog.filter((entry) => entry.type === "ai_generation").length}
+                    {activityLog.filter((entry: ActivityLogEntry) => entry.type === "ai_generation").length}
                   </p>
                 </div>
                 <Sparkles className="w-8 h-8 text-purple-600" />
@@ -321,7 +325,7 @@ export default function ActivityLogPage() {
                 <div>
                   <p className="text-sm text-gray-600">Documents Saved</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {activityLog.filter((entry) => entry.type === "save").length}
+                    {activityLog.filter((entry: ActivityLogEntry) => entry.type === "save").length}
                   </p>
                 </div>
                 <Save className="w-8 h-8 text-orange-600" />
