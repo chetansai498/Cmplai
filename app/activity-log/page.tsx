@@ -42,10 +42,16 @@ export default function ActivityLogPage() {
   useEffect(() => {
     // Filter activity log based on search and filters
     let filtered = activityLog
+    interface ActivityLogEntry {
+  action: string;
+  details: string;
+  user: string;
+  // add other properties as needed
+}
 
     if (searchTerm) {
       filtered = filtered.filter(
-        (entry:any) =>
+        (entry:ActivityLogEntry) =>
           entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
           entry.user.toLowerCase().includes(searchTerm.toLowerCase()),
