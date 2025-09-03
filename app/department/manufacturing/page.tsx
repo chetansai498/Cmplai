@@ -333,41 +333,4 @@ export default function ManufacturingPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Current</span>
-                      <span className={`font-bold ${getEfficiencyColor(metric.efficiency, metric.target)}`}>
-                        {metric.efficiency}%
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Target</span>
-                      <span className="font-bold text-gray-700">{metric.target}%</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {activities.map((item) => (
-                <div key={item.id} className="flex items-center justify-between bg-white p-3 rounded border">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{item.action}</p>
-                    <p className="text-xs text-gray-600">{item.document} • {item.user}</p>
-                  </div>
-                  <span className="text-xs text-gray-500">{item.timestamp}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
-}
+                      <span className={`font-bold ${getEfficiencyColor(metric.\

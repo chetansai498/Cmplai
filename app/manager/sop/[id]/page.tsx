@@ -71,7 +71,7 @@ export default function ManagerSOPPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
@@ -132,7 +132,7 @@ export default function ManagerSOPPage() {
                     <X className="w-3 h-3 mr-2" />
                     Reject & Send Feedback
                   </Button>
-                  <Button variant="outline" className="w-full" size="sm">
+                  <Button variant="outline" className="w-full bg-transparent" size="sm">
                     <Save className="w-3 h-3 mr-2" />
                     Save Changes
                   </Button>
@@ -200,40 +200,54 @@ export default function ManagerSOPPage() {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Document Header */}
-            <Card className="mb-8">
-              <CardHeader className="text-center border-b">
-                <div className="space-y-2">
-                  <h1 className="text-2xl font-bold text-gray-900">STANDARD OPERATING PROCEDURE</h1>
-                  <h2 className="text-xl text-gray-700">Hot Work Safety Protocol</h2>
-                  <div className="flex justify-center space-x-8 text-sm text-gray-600 mt-4">
-                    <div>
-                      <span className="font-medium">Department:</span> EHS
-                    </div>
-                    <div>
-                      <span className="font-medium">Document Type:</span> SOP
-                    </div>
-                    <div>
-                      <span className="font-medium">Version:</span> 1.0
-                    </div>
+        {/* Main Content Area - A4 Format like Employee Portal */}
+        <div className="flex-1 bg-gray-100 overflow-y-auto">
+          <div className="py-8">
+            {/* A4 Page Container */}
+            <div
+              className="bg-white shadow-lg border border-gray-300 mx-auto p-8 relative"
+              style={{
+                width: "210mm",
+                minHeight: "297mm",
+                maxWidth: "210mm",
+              }}
+            >
+              {/* Document Header */}
+              <div className="mb-8 text-center border-b border-gray-200 pb-6">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">STANDARD OPERATING PROCEDURE</h1>
+                <h2 className="text-xl text-gray-700 mb-4">Hot Work Safety Protocol</h2>
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                  <div className="text-left">
+                    <p>
+                      <strong>Department:</strong> EHS
+                    </p>
+                    <p>
+                      <strong>Document Type:</strong> SOP
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p>
+                      <strong>Version:</strong> 1.0
+                    </p>
+                    <p>
+                      <strong>Date:</strong> {new Date().toLocaleDateString()}
+                    </p>
+                    <p>
+                      <strong>SOP No.:</strong> EHS-SOP-001
+                    </p>
                   </div>
                 </div>
-              </CardHeader>
-            </Card>
+              </div>
 
-            {/* SOP Sections */}
-            <div className="space-y-6">
-              {sopSections.map((section) => (
-                <Card key={section.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center justify-between">
-                      <span className="flex items-center gap-2">
+              {/* SOP Sections */}
+              <div className="space-y-6 min-h-[200mm]">
+                {sopSections.map((section) => (
+                  <div key={section.id} className="page-break-inside-avoid">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                         {section.title}
                         {section.required && <span className="text-red-500">*</span>}
-                      </span>
+                      </h3>
                       <div className="flex items-center space-x-2">
                         {isEditing && (
                           <Badge variant="outline" className="text-xs bg-yellow-50 text-yellow-700">
@@ -244,32 +258,37 @@ export default function ManagerSOPPage() {
                           {sectionContent[section.id] ? "Completed" : "Empty"}
                         </Badge>
                       </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      value={sectionContent[section.id] || ""}
-                      onChange={(e) =>
-                        setSectionContent((prev) => ({
-                          ...prev,
-                          [section.id]: e.target.value,
-                        }))
-                      }
-                      className={`min-h-[120px] transition-colors ${
-                        isEditing ? "border-blue-300 bg-blue-50/30 focus:border-blue-500" : "border-gray-200 bg-gray-50"
-                      }`}
-                      rows={5}
-                      readOnly={!isEditing}
-                      placeholder={isEditing ? `Edit content for ${section.title}...` : "No content available"}
-                    />
-                    {isEditing && (
-                      <p className="text-xs text-blue-600 mt-2">
-                        Changes made here will be reflected in the employee panel after approval.
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+                    </div>
+                    <div className="border border-gray-200 rounded-lg p-4">
+                      <Textarea
+                        value={sectionContent[section.id] || ""}
+                        onChange={(e) =>
+                          setSectionContent((prev) => ({
+                            ...prev,
+                            [section.id]: e.target.value,
+                          }))
+                        }
+                        className={`min-h-[120px] transition-colors text-justify ${
+                          isEditing
+                            ? "border-blue-300 bg-blue-50/30 focus:border-blue-500"
+                            : "border-gray-200 bg-gray-50"
+                        }`}
+                        rows={5}
+                        readOnly={!isEditing}
+                        placeholder={isEditing ? `Edit content for ${section.title}...` : "No content available"}
+                      />
+                      {isEditing && (
+                        <p className="text-xs text-blue-600 mt-2">
+                          Changes made here will be reflected in the employee panel after approval.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Page Footer with Page Number */}
+              <div className="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-500">Page 1 of 1</div>
             </div>
           </div>
         </div>
