@@ -6,40 +6,40 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   Bell,
-  Calendar,
-  Target,
-  Users,
-  Building2,
   Clock,
   FileText,
+  Users,
   Shield,
-  Beaker,
   Factory,
+  Beaker,
   Truck,
-  Stethoscope,
+  DollarSign,
+  Building,
+  Zap,
+  Activity,
+  Calendar,
+  Target,
+  Home,
+  Settings,
+  LogOut,
+  BarChart3,
+  LineChart,
+  Award,
+  Globe,
   TrendingUp,
   Monitor,
   UserCheck,
   Scale,
   FlaskConical,
-  DollarSign,
+  Stethoscope,
   Menu,
   X,
-  Home,
-  Settings,
-  LogOut,
-  Activity,
-  BarChart3,
-  LineChart,
-  Award,
-  Zap,
-  Globe,
 } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 
 const allDepartments = [
-  { id: "ehs", name: "EHS", icon: Shield, color: "bg-red-500", documents: 12, pendingApprovals: 4 },
+  { id: "ehs", name: "EHS", icon: Shield, color: "bg-red-500", documents: 12, pendingApprovals: 4, available: true },
   {
     id: "regulatory-affairs",
     name: "Regulatory Affairs",
@@ -47,6 +47,7 @@ const allDepartments = [
     color: "bg-blue-500",
     documents: 8,
     pendingApprovals: 2,
+    available: false,
   },
   {
     id: "quality-assurance",
@@ -55,6 +56,7 @@ const allDepartments = [
     color: "bg-green-500",
     documents: 15,
     pendingApprovals: 3,
+    available: false,
   },
   {
     id: "quality-control",
@@ -63,6 +65,7 @@ const allDepartments = [
     color: "bg-purple-500",
     documents: 10,
     pendingApprovals: 1,
+    available: false,
   },
   {
     id: "manufacturing",
@@ -71,8 +74,17 @@ const allDepartments = [
     color: "bg-orange-500",
     documents: 20,
     pendingApprovals: 5,
+    available: false,
   },
-  { id: "supply-chain", name: "Supply Chain", icon: Truck, color: "bg-indigo-500", documents: 14, pendingApprovals: 2 },
+  {
+    id: "supply-chain",
+    name: "Supply Chain",
+    icon: Truck,
+    color: "bg-indigo-500",
+    documents: 14,
+    pendingApprovals: 2,
+    available: false,
+  },
   {
     id: "clinical-operations",
     name: "Clinical Operations",
@@ -80,6 +92,7 @@ const allDepartments = [
     color: "bg-pink-500",
     documents: 9,
     pendingApprovals: 1,
+    available: false,
   },
   {
     id: "sales-marketing",
@@ -88,10 +101,27 @@ const allDepartments = [
     color: "bg-cyan-500",
     documents: 11,
     pendingApprovals: 0,
+    available: false,
   },
-  { id: "it", name: "IT", icon: Monitor, color: "bg-gray-500", documents: 7, pendingApprovals: 1 },
-  { id: "hr", name: "HR", icon: UserCheck, color: "bg-yellow-500", documents: 13, pendingApprovals: 2 },
-  { id: "finance", name: "Finance", icon: DollarSign, color: "bg-emerald-500", documents: 16, pendingApprovals: 3 },
+  { id: "it", name: "IT", icon: Monitor, color: "bg-gray-500", documents: 7, pendingApprovals: 1, available: false },
+  {
+    id: "hr",
+    name: "HR",
+    icon: UserCheck,
+    color: "bg-yellow-500",
+    documents: 13,
+    pendingApprovals: 2,
+    available: false,
+  },
+  {
+    id: "finance",
+    name: "Finance",
+    icon: DollarSign,
+    color: "bg-emerald-500",
+    documents: 16,
+    pendingApprovals: 3,
+    available: false,
+  },
 ]
 
 // Mock chart data
@@ -399,7 +429,7 @@ export default function DashboardPage() {
                 </Button>
               </Link>
               <Button variant="ghost" className="w-full justify-start">
-                <Building2 className="w-4 h-4 mr-3" />
+                <Building className="w-4 h-4 mr-3" />
                 Organization Chart
               </Button>
               <Link href="/timesheet">
@@ -499,7 +529,7 @@ export default function DashboardPage() {
                 <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-gray-50">
                   <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-2 text-xl">
-                      <Building2 className="w-6 h-6 text-blue-600" />
+                      <Building className="w-6 h-6 text-blue-600" />
                       {userDepartment === "executive" ? "All Departments" : "Your Department"}
                       {userType === "manager" && (
                         <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800">
@@ -517,33 +547,55 @@ export default function DashboardPage() {
                     {departments.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {departments.map((dept, index) => (
-                          <Link key={index} href={getDepartmentLink(dept.name, dept.id)}>
-                            <Card className="hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer border-0 bg-gradient-to-br from-white to-gray-50">
-                              <CardContent className="p-4">
-                                <div className="flex items-center space-x-3">
-                                  <div className={`p-3 rounded-xl ${dept.color} shadow-lg`}>
-                                    <dept.icon className="w-6 h-6 text-white" />
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-gray-900 truncate">{dept.name}</p>
-                                    <div className="flex items-center space-x-2">
-                                      <p className="text-xs text-gray-500">{dept.documents} documents</p>
-                                      {userType === "manager" && dept.pendingApprovals > 0 && (
-                                        <Badge variant="destructive" className="text-xs animate-pulse">
-                                          {dept.pendingApprovals} pending
+                          <div key={index}>
+                            {dept.available ? (
+                              <Link href={getDepartmentLink(dept.name, dept.id)}>
+                                <Card className="hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer border-0 bg-gradient-to-br from-white to-gray-50">
+                                  <CardContent className="p-4">
+                                    <div className="flex items-center space-x-3">
+                                      <div className={`p-3 rounded-xl ${dept.color} shadow-lg`}>
+                                        <dept.icon className="w-6 h-6 text-white" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-bold text-gray-900 truncate">{dept.name}</p>
+                                        <div className="flex items-center space-x-2">
+                                          <p className="text-xs text-gray-500">{dept.documents} documents</p>
+                                          {userType === "manager" && dept.pendingApprovals > 0 && (
+                                            <Badge variant="destructive" className="text-xs animate-pulse">
+                                              {dept.pendingApprovals} pending
+                                            </Badge>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              </Link>
+                            ) : (
+                              <Card className="border-0 bg-gradient-to-br from-gray-100 to-gray-200 opacity-75">
+                                <CardContent className="p-4">
+                                  <div className="flex items-center space-x-3">
+                                    <div className={`p-3 rounded-xl ${dept.color} shadow-lg opacity-50`}>
+                                      <dept.icon className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-bold text-gray-600 truncate">{dept.name}</p>
+                                      <div className="flex items-center space-x-2">
+                                        <Badge variant="secondary" className="text-xs bg-yellow-100 text-yellow-800">
+                                          Coming Soon
                                         </Badge>
-                                      )}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </Link>
+                                </CardContent>
+                              </Card>
+                            )}
+                          </div>
                         ))}
                       </div>
                     ) : (
                       <div className="text-center py-12 text-gray-500">
-                        <Building2 className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                        <Building className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                         <p className="text-lg font-medium">No departments available</p>
                         <p className="text-sm mt-2">Please contact your administrator if this seems incorrect.</p>
                       </div>

@@ -899,7 +899,7 @@ export default function CreateDocumentPage() {
 
   const generateAIContent = async () => {
     if (!aiPrompt.trim()) return;
-
+  
     setIsGenerating(true);
     setGeneratedContent("");
     try {
@@ -908,15 +908,15 @@ export default function CreateDocumentPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: aiPrompt.trim() }),
       });
-
+  
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to get response");
-
+  
       const content =
         typeof data.response === "string"
           ? data.response
           : JSON.stringify(data.response);
-
+  
       setGeneratedContent(content);
       setShowFeedback(true);
     } catch (err) {
