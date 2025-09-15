@@ -797,135 +797,41 @@ export default function JobSafetyAnalysisPage() {
                     </div>
                   </div>
 
-                  {/* JSA Table */}
-                  <div className="w-full">
-                    <table className="w-full border-collapse border border-gray-300">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 w-12">
-                            Sl. No.
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[200px]">
-                            Activity (Job Steps)
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[200px]">
-                            Potential Hazard
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 w-32">
-                            Severity Before
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[250px]">
-                            Control/Mitigation Measures
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 w-32">
-                            Severity After
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">
-                            Action Party
-                          </th>
-                          <th className="border border-gray-300 px-3 py-3 text-center text-xs font-medium text-gray-700 w-24 no-print">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {jsaRows.map((row, index) => (
-                          <tr key={row.id} className="min-h-[80px]">
-                            <td className="border border-gray-300 px-3 py-3 text-center text-sm align-top">
-                              {index + 1}
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Textarea
-                                value={row.activity}
-                                onChange={(e) => updateJSARow(row.id, "activity", e.target.value)}
-                                className="min-h-[60px] w-full border-none p-0 resize-none focus:ring-0 text-xs leading-tight"
-                                placeholder="Describe the job step or activity..."
-                              />
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Textarea
-                                value={row.hazard}
-                                onChange={(e) => updateJSARow(row.id, "hazard", e.target.value)}
-                                className="min-h-[60px] w-full border-none p-0 resize-none focus:ring-0 text-xs leading-tight"
-                                placeholder="Identify potential hazards..."
-                              />
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Select
-                                value={row.severityBefore}
-                                onValueChange={(value) => updateJSARow(row.id, "severityBefore", value)}
+            {/* Section Selection */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-500" />
+                  Section Selection
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Select Document Section:</label>
+                  <Select value={selectedSection} onValueChange={handleSectionSelect}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a section to work on..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {documentSections.map((section) => (
+                        <SelectItem key={section.id} value={section.id}>
+                          <div className="flex items-center justify-between w-full">
+                            <span>{section.title}</span>
+                            <div className="flex items-center space-x-2 ml-4">
+                              {section.required && <span className="text-red-500 text-xs">*</span>}
+                              <Badge
+                                variant={getSectionStatus(section.id) === "completed" ? "default" : "secondary"}
+                                className="text-xs"
                               >
-                                <SelectTrigger className="h-8 text-xs">
-                                  <SelectValue placeholder="Select" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="low">Low</SelectItem>
-                                  <SelectItem value="medium">Medium</SelectItem>
-                                  <SelectItem value="high">High</SelectItem>
-                                  <SelectItem value="critical">Critical</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Textarea
-                                value={row.controlMeasures}
-                                onChange={(e) => updateJSARow(row.id, "controlMeasures", e.target.value)}
-                                className="min-h-[60px] w-full border-none p-0 resize-none focus:ring-0 text-xs leading-tight"
-                                placeholder="Describe control measures..."
-                              />
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Select
-                                value={row.severityAfter}
-                                onValueChange={(value) => updateJSARow(row.id, "severityAfter", value)}
-                              >
-                                <SelectTrigger className="h-8 text-xs">
-                                  <SelectValue placeholder="Select" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="low">Low</SelectItem>
-                                  <SelectItem value="medium">Medium</SelectItem>
-                                  <SelectItem value="high">High</SelectItem>
-                                  <SelectItem value="critical">Critical</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 align-top">
-                              <Input
-                                value={row.actionParty}
-                                onChange={(e) => updateJSARow(row.id, "actionParty", e.target.value)}
-                                className="min-h-[60px] w-full border-none p-0 resize-none focus:ring-0 text-xs leading-tight"
-                                placeholder="Responsible party..."
-                              />
-                            </td>
-                            <td className="border border-gray-300 px-3 py-3 text-center align-top no-print">
-                              <div className="flex flex-col space-y-1">
-                                {jsaRows.length > 1 && (
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => removeJSARow(row.id)}
-                                    className="text-red-600 hover:text-red-700 h-6 w-6 p-0"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </Button>
-                                )}
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => analyzeActivityRow(row)}
-                                  className="h-6 text-xs px-1"
-                                  disabled={analyzingRowId === row.id || !row.activity.trim()}
-                                >
-                                  {analyzingRowId === row.id ? <Loader2 className="w-3 h-3 animate-spin" /> : "AI"}
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                                {getSectionStatus(section.id) === "completed" ? "Completed" : "Empty"}
+                              </Badge>
+                            </div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                   <div className="mt-4 flex justify-center no-print">
                     <Button onClick={addJSARow} className="bg-green-600 hover:bg-green-700 text-white">
