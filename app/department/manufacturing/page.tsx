@@ -333,19 +333,4 @@ export default function ManufacturingPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Current</span>
-                      <span className={`font-bold ${getEfficiencyColor(metric.efficiency, metric.target)}`}>{metric.efficiency}%</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Target</span>
-                      <span className={`font-bold ${getEfficiencyColor(metric.efficiency, metric.target)}`}>{metric.target}%</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
-}
+                      <span className={`font-bold ${getEfficiencyColor(metric.\
