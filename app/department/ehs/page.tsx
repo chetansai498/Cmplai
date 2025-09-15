@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   ArrowLeft,
   Shield,
@@ -21,6 +22,25 @@ import {
   Download,
   Search,
   Filter,
+  Leaf,
+  Droplets,
+  Wind,
+  Zap,
+  HardHat,
+  Activity,
+  BookOpen,
+  ClipboardCheck,
+  Heart,
+  Flame,
+  Lock,
+  UserCheck,
+  Building,
+  Recycle,
+  FileBarChart,
+  TreePine,
+  Truck,
+  ShieldIcon,
+  Pill,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -83,6 +103,315 @@ const ehsDocuments = [
   },
 ]
 
+const documentTemplates = [
+  {
+    id: 1,
+    title: "Environmental Impact Assessment (EIA)",
+    description: "Comprehensive assessment of environmental impacts for projects and operations",
+    category: "Environmental",
+    icon: Leaf,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 2,
+    title: "Chemical Hygiene Plan",
+    description: "Laboratory chemical safety procedures and protocols",
+    category: "Chemical Safety",
+    icon: Pill,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 3,
+    title: "Personal Protective Equipment (PPE) Program",
+    description: "PPE selection, use, maintenance, and training program",
+    category: "Safety",
+    icon: HardHat,
+    color: "text-orange-600",
+    bgColor: "bg-orange-100",
+  },
+  {
+    id: 4,
+    title: "Air Emissions Permit",
+    description: "Air quality permits and emissions monitoring documentation",
+    category: "Environmental",
+    icon: Wind,
+    color: "text-sky-600",
+    bgColor: "bg-sky-100",
+  },
+  {
+    id: 5,
+    title: "Water Discharge Permit",
+    description: "Wastewater discharge permits and monitoring requirements",
+    category: "Environmental",
+    icon: Droplets,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 6,
+    title: "Noise Control Program",
+    description: "Workplace noise assessment and control measures",
+    category: "Health",
+    icon: Activity,
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
+  },
+  {
+    id: 7,
+    title: "Waste Management Plan",
+    description: "Comprehensive waste reduction, recycling, and disposal plan",
+    category: "Environmental",
+    icon: Recycle,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 8,
+    title: "Spill Response Plan",
+    description: "Emergency response procedures for chemical spills",
+    category: "Emergency",
+    icon: AlertTriangle,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 9,
+    title: "Indoor Air Quality Assessment",
+    description: "Assessment and monitoring of indoor air quality parameters",
+    category: "Health",
+    icon: Wind,
+    color: "text-teal-600",
+    bgColor: "bg-teal-100",
+  },
+  {
+    id: 10,
+    title: "Ergonomics Assessment",
+    description: "Workplace ergonomics evaluation and improvement program",
+    category: "Health",
+    icon: Users,
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-100",
+  },
+  {
+    id: 11,
+    title: "Radiation Safety Program",
+    description: "Radiation protection and safety procedures",
+    category: "Safety",
+    icon: Zap,
+    color: "text-yellow-600",
+    bgColor: "bg-yellow-100",
+  },
+  {
+    id: 12,
+    title: "Contractor Safety Program",
+    description: "Safety requirements and procedures for contractors",
+    category: "Safety",
+    icon: UserCheck,
+    color: "text-gray-600",
+    bgColor: "bg-gray-100",
+  },
+  {
+    id: 13,
+    title: "Fire Prevention and Safety Plan",
+    description: "Fire prevention, detection, and emergency response procedures",
+    category: "Emergency",
+    icon: Flame,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 14,
+    title: "Respiratory Protection Program",
+    description: "Respiratory protection equipment and training program",
+    category: "Safety",
+    icon: Shield,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 15,
+    title: "Confined Space Entry Program",
+    description: "Safe entry procedures for confined spaces",
+    category: "Safety",
+    icon: Building,
+    color: "text-gray-600",
+    bgColor: "bg-gray-100",
+  },
+  {
+    id: 16,
+    title: "Electrical Safety Program",
+    description: "Electrical hazard identification and safety procedures",
+    category: "Safety",
+    icon: Zap,
+    color: "text-yellow-600",
+    bgColor: "bg-yellow-100",
+  },
+  {
+    id: 17,
+    title: "Fall Protection Program",
+    description: "Fall hazard assessment and protection systems",
+    category: "Safety",
+    icon: ShieldIcon,
+    color: "text-orange-600",
+    bgColor: "bg-orange-100",
+  },
+  {
+    id: 18,
+    title: "Hazard Communication Program",
+    description: "Chemical hazard communication and labeling system",
+    category: "Chemical Safety",
+    icon: AlertTriangle,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 19,
+    title: "Safety Data Sheets (SDS)",
+    description: "Chemical safety data sheets management system",
+    category: "Chemical Safety",
+    icon: FileText,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 20,
+    title: "First Aid and Emergency Response Procedures",
+    description: "Medical emergency response and first aid procedures",
+    category: "Emergency",
+    icon: Heart,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 21,
+    title: "Hazardous Energy Control (Lockout/Tagout)",
+    description: "Energy isolation and lockout/tagout procedures",
+    category: "Safety",
+    icon: Lock,
+    color: "text-gray-600",
+    bgColor: "bg-gray-100",
+  },
+  {
+    id: 22,
+    title: "Workplace Inspection Checklist",
+    description: "Systematic workplace safety inspection procedures",
+    category: "Safety",
+    icon: ClipboardCheck,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 23,
+    title: "Heat Stress Prevention Program",
+    description: "Heat-related illness prevention and control measures",
+    category: "Health",
+    icon: Activity,
+    color: "text-orange-600",
+    bgColor: "bg-orange-100",
+  },
+  {
+    id: 24,
+    title: "Biological Safety Program",
+    description: "Biosafety procedures and containment protocols",
+    category: "Safety",
+    icon: Shield,
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
+  },
+  {
+    id: 25,
+    title: "Incident Investigation Report",
+    description: "Systematic incident investigation and reporting procedures",
+    category: "Safety",
+    icon: FileBarChart,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 26,
+    title: "Safety Training Records",
+    description: "Employee safety training documentation and tracking",
+    category: "Training",
+    icon: BookOpen,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 27,
+    title: "Asbestos Management Plan",
+    description: "Asbestos identification, management, and removal procedures",
+    category: "Health",
+    icon: Building,
+    color: "text-gray-600",
+    bgColor: "bg-gray-100",
+  },
+  {
+    id: 28,
+    title: "Environmental Monitoring Report",
+    description: "Environmental parameter monitoring and reporting",
+    category: "Environmental",
+    icon: FileBarChart,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 29,
+    title: "Green Chemistry Initiatives",
+    description: "Sustainable chemistry practices and implementation",
+    category: "Environmental",
+    icon: TreePine,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 30,
+    title: "Sustainability Report",
+    description: "Corporate sustainability metrics and initiatives",
+    category: "Environmental",
+    icon: Leaf,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    id: 31,
+    title: "Hazardous Waste Manifest",
+    description: "Hazardous waste tracking and disposal documentation",
+    category: "Environmental",
+    icon: Truck,
+    color: "text-orange-600",
+    bgColor: "bg-orange-100",
+  },
+  {
+    id: 32,
+    title: "Stormwater Pollution Prevention Plan (SWPPP)",
+    description: "Stormwater management and pollution prevention",
+    category: "Environmental",
+    icon: Droplets,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: 33,
+    title: "Workplace Violence Prevention Program",
+    description: "Violence prevention policies and response procedures",
+    category: "Safety",
+    icon: Shield,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+  },
+  {
+    id: 34,
+    title: "Drug Enforcement Administration (DEA) Compliance",
+    description: "DEA regulatory compliance for controlled substances",
+    category: "Compliance",
+    icon: ClipboardCheck,
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
+  },
+]
+
 const recentActivities = [
   {
     id: 1,
@@ -123,6 +452,7 @@ export default function EHSPage() {
   const [activities, setActivities] = useState(recentActivities)
   const [userType, setUserType] = useState("employee")
   const [userName, setUserName] = useState("")
+  const [activeTab, setActiveTab] = useState("ongoing")
 
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType") || "employee"
@@ -191,7 +521,27 @@ export default function EHSPage() {
   const completedDocs = documents.filter((doc) => doc.status === "completed").length
   const inProgressDocs = documents.filter((doc) => doc.status === "in_progress").length
   const overdueDocs = documents.filter((doc) => doc.status === "overdue").length
-  const averageProgress = Math.round(documents.reduce((sum, doc) => sum + doc.progress, 0) / documents.length)
+
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case "Environmental":
+        return "bg-green-100 text-green-800"
+      case "Safety":
+        return "bg-blue-100 text-blue-800"
+      case "Health":
+        return "bg-purple-100 text-purple-800"
+      case "Emergency":
+        return "bg-red-100 text-red-800"
+      case "Chemical Safety":
+        return "bg-orange-100 text-orange-800"
+      case "Training":
+        return "bg-indigo-100 text-indigo-800"
+      case "Compliance":
+        return "bg-gray-100 text-gray-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -293,7 +643,7 @@ export default function EHSPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Documents List */}
+          {/* Main Content */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -315,53 +665,101 @@ export default function EHSPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {documents.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">{doc.title}</h3>
-                          <p className="text-sm text-gray-600 mb-2">{doc.type}</p>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Badge className={`text-xs ${getStatusColor(doc.status)}`}>
-                              {getStatusIcon(doc.status)}
-                              <span className="ml-1">{doc.status.replace("_", " ")}</span>
-                            </Badge>
-                            <Badge className={`text-xs ${getPriorityColor(doc.priority)}`}>{doc.priority}</Badge>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="ongoing">Ongoing Documents</TabsTrigger>
+                    <TabsTrigger value="templates">Document Templates</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="ongoing" className="space-y-4 mt-6">
+                    {documents.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 mb-1">{doc.title}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{doc.type}</p>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Badge className={`text-xs ${getStatusColor(doc.status)}`}>
+                                {getStatusIcon(doc.status)}
+                                <span className="ml-1">{doc.status.replace("_", " ")}</span>
+                              </Badge>
+                              <Badge className={`text-xs ${getPriorityColor(doc.priority)}`}>{doc.priority}</Badge>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Eye className="w-3 h-3" />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Edit className="w-3 h-3" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <Eye className="w-3 h-3" />
-                          </Button>
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            <Edit className="w-3 h-3" />
-                          </Button>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Progress</span>
+                            <span className="font-medium">{doc.progress}%</span>
+                          </div>
+                          <Progress value={doc.progress} className="h-2" />
+                          <div className="flex items-center justify-between text-sm text-gray-600">
+                            <div className="flex items-center">
+                              <Users className="w-4 h-4 mr-1" />
+                              {doc.assignee}
+                            </div>
+                            <div className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-1" />
+                              Due: {new Date(doc.dueDate).toLocaleDateString()}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600">Progress</span>
-                          <span className="font-medium">{doc.progress}%</span>
-                        </div>
-                        <Progress value={doc.progress} className="h-2" />
-                        <div className="flex items-center justify-between text-sm text-gray-600">
-                          <div className="flex items-center">
-                            <Users className="w-4 h-4 mr-1" />
-                            {doc.assignee}
+                    ))}
+                  </TabsContent>
+
+                  <TabsContent value="templates" className="mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {documentTemplates.map((template) => {
+                        const IconComponent = template.icon
+                        return (
+                          <div
+                            key={template.id}
+                            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer group"
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`p-2 rounded-lg ${template.bgColor} group-hover:scale-110 transition-transform`}
+                              >
+                                <IconComponent className={`w-5 h-5 ${template.color}`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-blue-600 transition-colors">
+                                  {template.title}
+                                </h3>
+                                <p className="text-xs text-gray-600 mb-2 line-clamp-2">{template.description}</p>
+                                <Badge className={`text-xs ${getCategoryColor(template.category)}`}>
+                                  {template.category}
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="mt-3 flex items-center justify-between">
+                              <Button variant="outline" size="sm" className="text-xs h-7 bg-transparent">
+                                <Plus className="w-3 h-3 mr-1" />
+                                Use Template
+                              </Button>
+                              <Button variant="ghost" size="sm" className="text-xs h-7">
+                                <Eye className="w-3 h-3 mr-1" />
+                                Preview
+                              </Button>
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            Due: {new Date(doc.dueDate).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </div>
+                        )
+                      })}
                     </div>
-                  ))}
-                </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </div>
